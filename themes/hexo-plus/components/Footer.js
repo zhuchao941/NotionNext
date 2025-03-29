@@ -12,19 +12,10 @@ const Footer = ({ title, route }) => {
   const copyrightDate =
     parseInt(since) < currentYear ? since + '-' + currentYear : currentYear
 
-  // 根据路由判断标题内容
+  // 根据路由判断是否显示标题
   const getH1Content = () => {
-    if (route === '/') {
+    if (route === '/' || route.includes('/tag') || route.includes('/category') || route.includes('/archive')) {
       return title
-    }
-    if (route.includes('/tag')) {
-      return `${locale.COMMON.TAGS} | Tags`
-    }
-    if (route.includes('/category')) {
-      return `${locale.COMMON.CATEGORY} | Categories`
-    }
-    if (route.includes('/archive')) {
-      return `${locale.COMMON.ARCHIVE} | Archives`
     }
     return null
   }
