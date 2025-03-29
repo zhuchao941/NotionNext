@@ -3,7 +3,7 @@ import BeiAnSite from '@/components/BeiAnSite'
 import PoweredBy from '@/components/PoweredBy'
 import { siteConfig } from '@/lib/config'
 
-const Footer = ({ title }) => {
+const Footer = ({ title, post }) => {
   const d = new Date()
   const currentYear = d.getFullYear()
   const since = siteConfig('SINCE')
@@ -32,9 +32,12 @@ const Footer = ({ title }) => {
           <i className='fas fa-users' />
           <span className='px-1 busuanzi_value_site_uv'> </span>
         </span>
-        <h1 className='text-xs pt-4 text-light-400 dark:text-gray-400'>
-          {title} {siteConfig('BIO') && <>|</>} {siteConfig('BIO')}
-        </h1>
+
+        {(!post || post.type === 'Page') && (
+          <h1 className='text-xs pt-4 text-light-400 dark:text-gray-400'>
+            {title} {siteConfig('BIO') && <>|</>} {siteConfig('BIO')}
+          </h1>
+        )}
         <PoweredBy className='justify-center' />
       </span>
       <br />
