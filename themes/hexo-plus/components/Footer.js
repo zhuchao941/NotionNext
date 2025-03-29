@@ -2,13 +2,34 @@ import { BeiAnGongAn } from '@/components/BeiAnGongAn'
 import BeiAnSite from '@/components/BeiAnSite'
 import PoweredBy from '@/components/PoweredBy'
 import { siteConfig } from '@/lib/config'
+import { useGlobal } from '@/lib/global'
 
-const Footer = ({ title, post }) => {
+const Footer = ({ title, route }) => {
   const d = new Date()
   const currentYear = d.getFullYear()
   const since = siteConfig('SINCE')
+  const { locale } = useGlobal()
   const copyrightDate =
     parseInt(since) < currentYear ? since + '-' + currentYear : currentYear
+
+  // 根据路由判断标题内容
+  const getH1Content = () => {
+    if (route === '/') {
+      return title
+    }
+    if (route.includes('/tag')) {
+      return `${locale.COMMON.TAGS} | Tags`
+    }
+    if (route.includes('/category')) {
+      return `${locale.COMMON.CATEGORY} | Categories`
+    }
+    if (route.includes('/archive')) {
+      return `${locale.COMMON.ARCHIVE} | Archives`
+    }
+    return null
+  }
+
+  const h1Content = getH1Content()
 
   return (
     <footer className='relative z-10 dark:bg-black flex-shrink-0 bg-hexo-light-gray justify-center text-center m-auto w-full leading-6  text-gray-600 dark:text-gray-100 text-sm p-6'>
@@ -33,9 +54,9 @@ const Footer = ({ title, post }) => {
           <span className='px-1 busuanzi_value_site_uv'> </span>
         </span>
 
-        {(!post || post.type === 'Page') && (
+        {h1Content && (
           <h1 className='text-xs pt-4 text-light-400 dark:text-gray-400'>
-            {title} {siteConfig('BIO') && <>|</>} {siteConfig('BIO')}
+            {h1Content}
           </h1>
         )}
         <PoweredBy className='justify-center' />
