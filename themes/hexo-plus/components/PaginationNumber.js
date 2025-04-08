@@ -22,31 +22,35 @@ const PaginationNumber = ({ page, totalPage }) => {
   return (
     <div className='mt-10 mb-5 flex justify-center items-end font-medium text-indigo-400 duration-500 py-3 space-x-2'>
       {/* 上一页 */}
-      <Link
-        href={{
-          pathname:
-            currentPage === 2
-              ? `${pagePrefix}/`
-              : `${pagePrefix}/page/${currentPage - 1}`,
-          query: router.query.s ? { s: router.query.s } : {}
-        }}
-        rel='prev'
-        className={`${currentPage === 1 ? 'invisible' : 'block'} pb-0.5 hover:bg-indigo-400 hover:text-white w-6 text-center cursor-pointer duration-200 hover:font-bold`}>
-        <i className='fas fa-angle-left' />
-      </Link>
+      {currentPage !== 1 && (
+        <Link
+          href={{
+            pathname:
+              currentPage === 2
+                ? `${pagePrefix}/`
+                : `${pagePrefix}/page/${currentPage - 1}`,
+            query: router.query.s ? { s: router.query.s } : {}
+          }}
+          rel='prev'
+          className='pb-0.5 hover:bg-indigo-400 hover:text-white w-6 text-center cursor-pointer duration-200 hover:font-bold'>
+          <i className='fas fa-angle-left' />
+        </Link>
+      )}
 
       {pages}
 
       {/* 下一页 */}
-      <Link
-        href={{
-          pathname: `${pagePrefix}/page/${currentPage + 1}`,
-          query: router.query.s ? { s: router.query.s } : {}
-        }}
-        rel='next'
-        className={`${+showNext ? 'block' : 'invisible'} pb-0.5 hover:bg-indigo-400 hover:text-white w-6 text-center cursor-pointer duration-200 hover:font-bold`}>
-        <i className='fas fa-angle-right' />
-      </Link>
+      {showNext && (
+        <Link
+          href={{
+            pathname: `${pagePrefix}/page/${currentPage + 1}`,
+            query: router.query.s ? { s: router.query.s } : {}
+          }}
+          rel='next'
+          className='pb-0.5 hover:bg-indigo-400 hover:text-white w-6 text-center cursor-pointer duration-200 hover:font-bold'>
+          <i className='fas fa-angle-right' />
+        </Link>
+      )}
     </div>
   )
 }
