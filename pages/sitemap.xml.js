@@ -67,12 +67,12 @@ function generateLocalesSitemap(link, allPages, locale) {
       changefreq: 'daily',
       priority: '0.7'
     },
-    {
-      loc: `${link}${locale}/search`,
-      lastmod: dateNow,
-      changefreq: 'daily',
-      priority: '0.7'
-    },
+    // { 不让search页出现在sitemap中
+    //   loc: `${link}${locale}/search`,
+    //   lastmod: dateNow,
+    //   changefreq: 'daily',
+    //   priority: '0.7'
+    // },
     {
       loc: `${link}${locale}/tag`,
       lastmod: dateNow,
