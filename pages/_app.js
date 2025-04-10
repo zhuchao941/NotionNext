@@ -19,6 +19,8 @@ import ExternalPlugins from '@/components/ExternalPlugins'
 import SEO from '@/components/SEO'
 import { zhCN } from '@clerk/localizations'
 import dynamic from 'next/dynamic'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 // import { ClerkProvider } from '@clerk/nextjs'
 const ClerkProvider = dynamic(() =>
   import('@clerk/nextjs').then(m => m.ClerkProvider)
@@ -64,12 +66,25 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       {enableClerk ? (
-        <ClerkProvider localization={zhCN}>{content}</ClerkProvider>
+        <ClerkProvider localization={zhCN}>
+          {content}
+          <Analytics />
+          <SpeedInsights />
+        </ClerkProvider>
       ) : (
-        content
+        <>
+          {content}
+          <Analytics />
+          <SpeedInsights />
+        </>
       )}
     </>
   )
+}
+
+export function reportWebVitals(metric) {
+  // 这里可以将性能指标发送到您的分析服务
+  console.log(metric)
 }
 
 export default MyApp

@@ -86,6 +86,14 @@ const nextConfig = {
   },
   output: process.env.EXPORT ? 'export' : process.env.NEXT_BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
   staticPageGenerationTimeout: 120,
+  poweredByHeader: false,
+  compress: true,
+  productionBrowserSourceMaps: false,
+  optimizeFonts: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   // 多语言， 在export时禁用
   i18n: process.env.EXPORT
     ? undefined
@@ -95,9 +103,10 @@ const nextConfig = {
         locales
       },
   images: {
-    // 图片压缩
     formats: ['image/avif', 'image/webp'],
-    // 允许next/image加载的图片 域名
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
     domains: [
       'gravatar.com',
       'www.notion.so',
@@ -193,9 +202,8 @@ const nextConfig = {
         ]
       },
   webpack: (config, { dev, isServer }) => {
-    // 动态主题：添加 resolve.alias 配置，将动态路径映射到实际路径
     config.resolve.alias['@'] = path.resolve(__dirname)
-
+    
     if (!isServer) {
       console.log('[默认主题]', path.resolve(__dirname, 'themes', THEME))
     }
@@ -204,7 +212,32 @@ const nextConfig = {
       'themes',
       THEME
     )
-    // Enable source maps in development mode
+    
+    if (!dev && !isServer) {
+      config.optimization.minimize = true
+      config.optimization.concatenateModules = true
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            reuseExistingChunk: true
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true
+          }
+        }
+      }
+    }
+    
     if (process.env.NODE_ENV_API === 'development') {
       config.devtool = 'source-map'
     }
